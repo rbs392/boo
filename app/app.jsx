@@ -1,4 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-render(<h1>Hello world</h1>, document.getElementById('app-container'));
+import { Home } from './views';
+
+render(<Home />, document.getElementById('app-container'));
