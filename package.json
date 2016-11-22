@@ -1,0 +1,40 @@
+{
+  "name": "boo",
+  "version": "0.1.0",
+  "description": "Testing as it should be.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch dist/index.js dist/index.js",
+    "build": "webpack --config config/webpack.config.babel.js --progress -d",
+    "build:watch": "webpack --config config/webpack.config.babel.js --progress -d --watch",
+    "build:prod": "webpack --config config/webpack.config.babel.js -p"
+  },
+  "author": "rbs392",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-register": "^6.18.0",
+    "eslint": "^3.10.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.7.1",
+    "html-webpack-plugin": "^2.24.1",
+    "html-webpack-template": "^5.4.1",
+    "json-loader": "^0.5.4",
+    "mocha": "^3.1.2",
+    "nodemon": "^1.11.0",
+    "webpack": "^2.1.0-beta.27"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0"
+  }
+}
