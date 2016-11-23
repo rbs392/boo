@@ -1,0 +1,15 @@
+#home{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  .iframe-wrapper{
+    height: 100%;
+    padding: 0px;
+  }
+  .actionspane-wrapper{
+    height: 100%;
+  }
+  &.inactive {
+    background: rgba(0,0,0,0.4);
+  }
+}
