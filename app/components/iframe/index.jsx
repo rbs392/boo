@@ -1,76 +1,118 @@
+/* eslint-disable class-methods-use-this*/
 import $ from 'jquery';
 import React, { Component, PropTypes } from 'react';
 import { select } from 'optimal-select';
-import { popup, selectorinfo } from './templates';
+import Popup from './templates';
 import './style.scss';
 
 class Iframe extends Component {
   constructor(props) {
     super(props);
-    this.state = { listenersActive: false };
+    this.state = {
+      attributes: [],
+      style: {
+        top: '0px',
+        left: '0px',
+      },
+      selectedEl: null,
+      showPopup: false,
+    };
+    this.extract = this.extract.bind(this);
+    this.onClick = this.onClick.bind(this);
     this.bindEventListeners = this.bindEventListeners.bind(this);
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.html && !this.state.listenersActive) {
-      setTimeout(this.bindEventListeners, 100);
-      this.setState({ listenersActive: true });
-    }
+  componentWillReceiveProps() {
+    setTimeout(this.bindEventListeners, 100);
+  }
+  onClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const offset = 20;
+    const attributes = [
+      { key: 'text', value: 'text' },
+      { key: 'html', value: 'html' },
+    ];
+    const style = Object.assign({}, this.state.style, {
+      top: `${e.clientY + offset}px`,
+      left: `${e.clientX + offset}px`,
+    });
+
+    $.each(e.target.attributes, (k, v) => {
+      attributes.push({ key: 'attr', value: v.name });
+    });
+    this.setState({ attributes, style, selectedEl: e.target, showPopup: true });
+  }
+
+  onMouseOver(e) {
+    e.stopPropagation();
+    $(e.target).trigger('mouseleave');
+    $(e.target).addClass('boo-el-active');
+  }
+
+  onMouseLeave(e) {
+    const staleEl = $(e.target).parents().find('.boo-el-active');
+    $(staleEl).removeClass('boo-el-active');
   }
   bindEventListeners() {
-    const style = '<style>body .cursor-active{ box-shadow: 0px 0px 3px red !important; position: relative !important; }</style>';
-    $('#iframe').contents(0).find('head').append(style);
+    $('#iframe').contents(0).find('head').append('<style>.boo-el-active{box-shadow: 0px 0px 2px teal;}</style>');
     const iframeEls = $('#iframe').contents(0).find('body').find('*');
-    $('#iframe').contents(0).click(() => {
-      iframeEls.find('#selector-popup').remove();
-      iframeEls.find('#selector-info').remove();
-      $('.cursor-active').removeClass('cursor-active');
-    });
-    iframeEls.mouseover((e) => {
-      console.log(e.currentTarget === e.target)
-      $(e.currentTarget).one('mouseleave', () => {
-        if (iframeEls.find('#selector-popup').length) {
-          return;
-        }
-        e.stopPropagation();
-        iframeEls.find('#selector-info').remove();
-        $(e.currentTarget).removeClass('cursor-active');  
-      });
-      if ($(e.currentTarget).hasClass('boo-el') || iframeEls.find('#selector-popup').length) {
-        return this;
-      }
-      e.stopPropagation();
-      const sel = select(e.currentTarget);
-      $(e.currentTarget).addClass('cursor-active').append(selectorinfo(sel));
-      return this;
-    });
-
-
-    iframeEls.click((e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if ($(e.currentTarget).hasClass('boo-el')) {
-        return;
-      }
-      console.log(e);
-      $(e.currentTarget).append(popup(e.clientX, e.clientY, e.currentTarget.attributes));
-      // $(e.currentTarget).removeClass('cursor-active');
-    });
+    $(iframeEls).click(this.onClick);
+    $(iframeEls).mouseover(this.onMouseOver);
+    $(iframeEls).mouseleave(this.onMouseLeave);
   }
+
+  extract(el) {
+    return () => {
+      let value = '';
+      const attr = { key: el.key };
+      const selector = select(this.state.selectedEl);
+      if (el.value === 'text' || el.value === 'html') {
+        value = $(this.state.selectedEl)[el.key]();
+      } else {
+        value = $(this.state.selectedEl)[el.key](el.value);
+        attr.value = el.value;
+      }
+      this.setState({ showPopup: false });
+      this.props.onExtract({
+        attr,
+        value,
+        selector,
+      });
+    };
+  }
+
   render() {
     return (
-      <iframe
-        id="iframe"
-        className="component-iframe"
-        height="100%"
-        width="100%"
-        srcDoc={this.props.html}
-      />
+      <div className="component-iframe">
+        <iframe
+          id="iframe"
+          className="component-iframe"
+          height="100%"
+          width="100%"
+          srcDoc={this.props.html}
+        />
+        {
+          this.state.showPopup ?
+            <Popup style={this.state.style}>
+              <ul className="popup-list list-unstyled">
+                {this.state.attributes.map(x =>
+                  <li key={x.value}>
+                    <button onClick={this.extract(x)}>
+                      {x.value}
+                    </button>
+                  </li>)
+                }
+              </ul>
+            </Popup> : null
+        }
+      </div>
     );
   }
 }
 
 Component.propTypes = {
   html: PropTypes.string,
+  onExtract: PropTypes.func,
 };
 
 export default Iframe;
