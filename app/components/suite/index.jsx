@@ -53,11 +53,13 @@ class Suite extends Component {
           {
             this.state.scenarios.map((obj) => {
               const current = (obj.id === currentScenario) ? 'active' : '';
+              const extract = (obj.id === currentScenario) ? this.props.extract : {};
               return (<Scenario
                 className={current}
                 key={obj.id}
                 value={obj}
                 onUpdate={this.onUpdateIt}
+                extract={extract}
               />);
             })
           }
@@ -73,7 +75,14 @@ class Suite extends Component {
 }
 
 Suite.propTypes = {
-
+  extract: PropTypes.shape({
+    attr: PropTypes.shape({
+      key: PropTypes.string,
+      value: PropTypes.string,
+    }),
+    value: PropTypes.string,
+    selector: PropTypes.string,
+  }),
 };
 
 export default Suite;

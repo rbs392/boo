@@ -21,8 +21,10 @@ class Iframe extends Component {
     this.onClick = this.onClick.bind(this);
     this.bindEventListeners = this.bindEventListeners.bind(this);
   }
-  componentWillReceiveProps() {
-    setTimeout(this.bindEventListeners, 100);
+  componentWillReceiveProps(newProps) {
+    if (newProps.html !== this.props.html) {
+      setTimeout(this.bindEventListeners, 100);
+    }
   }
   onClick(e) {
     e.preventDefault();
@@ -60,6 +62,7 @@ class Iframe extends Component {
     $(staleEl).removeClass('boo-el-active');
   }
   clearEventListeners() {
+    console.log('events cleared');
     const iframeEls = $('#iframe').contents(0).find('body').find('*');
     $(iframeEls).off('click');
     $(iframeEls).off('mouseover');
@@ -123,7 +126,7 @@ class Iframe extends Component {
   }
 }
 
-Component.propTypes = {
+Iframe.propTypes = {
   html: PropTypes.string,
   onExtract: PropTypes.func,
 };

@@ -6,6 +6,14 @@ class ActionsPane extends Component {
   static propTypes = {
     onStart: PropTypes.func,
     start: PropTypes.bool,
+    extract: PropTypes.shape({
+      attr: PropTypes.shape({
+        key: PropTypes.string,
+        value: PropTypes.string,
+      }),
+      value: PropTypes.string,
+      selector: PropTypes.string,
+    }),
   }
   constructor(props) {
     super(props);
@@ -45,7 +53,7 @@ class ActionsPane extends Component {
         <div className="scenarios-wrapper">
           {
             this.props.start ?
-              <Suite onAddScenario={this.addScenario} />
+              <Suite onAddScenario={this.addScenario} extract={this.props.extract} />
             : null
           }
         </div>
