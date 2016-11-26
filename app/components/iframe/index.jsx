@@ -27,6 +27,9 @@ class Iframe extends Component {
   onClick(e) {
     e.preventDefault();
     e.stopPropagation();
+    if (this.state.showPopup) {
+      return this.setState({ showPopup: false });
+    }
     const offset = 20;
     const attributes = [
       { key: 'text', value: 'text' },
@@ -40,27 +43,36 @@ class Iframe extends Component {
     $.each(e.target.attributes, (k, v) => {
       attributes.push({ key: 'attr', value: v.name });
     });
-    this.setState({ attributes, style, selectedEl: e.target, showPopup: true });
+    return this.setState({
+      attributes,
+      style,
+      selectedEl: e.target,
+      showPopup: true,
+    });
   }
-
   onMouseOver(e) {
     e.stopPropagation();
     $(e.target).trigger('mouseleave');
     $(e.target).addClass('boo-el-active');
   }
-
   onMouseLeave(e) {
     const staleEl = $(e.target).parents().find('.boo-el-active');
     $(staleEl).removeClass('boo-el-active');
   }
+  clearEventListeners() {
+    const iframeEls = $('#iframe').contents(0).find('body').find('*');
+    $(iframeEls).off('click');
+    $(iframeEls).off('mouseover');
+    $(iframeEls).off('mouseleave');
+  }
   bindEventListeners() {
+    this.clearEventListeners();
     $('#iframe').contents(0).find('head').append('<style>.boo-el-active{box-shadow: 0px 0px 2px teal;}</style>');
     const iframeEls = $('#iframe').contents(0).find('body').find('*');
     $(iframeEls).click(this.onClick);
     $(iframeEls).mouseover(this.onMouseOver);
     $(iframeEls).mouseleave(this.onMouseLeave);
   }
-
   extract(el) {
     return () => {
       let value = '';
@@ -72,11 +84,12 @@ class Iframe extends Component {
         value = $(this.state.selectedEl)[el.key](el.value);
         attr.value = el.value;
       }
-      this.setState({ showPopup: false });
-      this.props.onExtract({
-        attr,
-        value,
-        selector,
+      this.setState({ showPopup: false, selectedEl: null }, () => {
+        this.props.onExtract({
+          attr,
+          value,
+          selector,
+        });
       });
     };
   }
@@ -97,7 +110,7 @@ class Iframe extends Component {
               <ul className="popup-list list-unstyled">
                 {this.state.attributes.map(x =>
                   <li key={x.value}>
-                    <button onClick={this.extract(x)}>
+                    <button className="btn btn-default" onClick={this.extract(x)}>
                       {x.value}
                     </button>
                   </li>)

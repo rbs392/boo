@@ -1,7 +1,9 @@
-import ActionsPane from './actions-pane';
 import Iframe from './iframe';
+import TextInput from './textInput';
+import ActionsPane from './actions-pane';
 
 export {
-  ActionsPane,
   Iframe,
+  TextInput,
+  ActionsPane,
 };

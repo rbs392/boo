@@ -1,22 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import './style.scss';
 import Suite from '../suite';
-import Scenario from '../scenario';
 
 class ActionsPane extends Component {
   static propTypes = {
     onStart: PropTypes.func,
+    start: PropTypes.bool,
   }
   constructor(props) {
     super(props);
     this.state = {
       url: '',
       describe: '',
-      scenarios: [],
     };
     this.onStart = this.onStart.bind(this);
     this.onUrlChange = this.onUrlChange.bind(this);
-    this.addScenario = this.addScenario.bind(this);
     this.onDescribeChange = this.onDescribeChange.bind(this);
   }
   onDescribeChange(e) {
@@ -29,16 +27,11 @@ class ActionsPane extends Component {
     e.preventDefault();
     this.props.onStart(this.state.url);
   }
-  addScenario() {
-    const scenarios = this.state.scenarios.slice();
-    scenarios.push(<Scenario key={`${scenarios.length}`} />);
-    this.setState({ scenarios });
-  }
   render() {
     return (
       <div className="component-actionspane">
         <form
-          className="form-group panel panel-default panel-body"
+          className="form-inline form-group panel panel-default panel-body"
           onSubmit={this.onStart}
         >
           <input
@@ -47,22 +40,14 @@ class ActionsPane extends Component {
             onChange={this.onUrlChange}
             value={this.state.url}
           />
-          <input
-            type="submit"
-            className="btn btn-default"
-            value="Start!"
-          />
+          <input type="submit" className="btn btn-default" value="Start!" />
         </form>
         <div className="scenarios-wrapper">
-          <button
-            className="btn btn-default"
-            onClick={this.addScenario}
-          >Add scenario</button>
-          <Suite>
-            {
-            this.state.scenarios.map(scenario => scenario)
+          {
+            this.props.start ?
+              <Suite onAddScenario={this.addScenario} />
+            : null
           }
-          </Suite>
         </div>
       </div>
     );

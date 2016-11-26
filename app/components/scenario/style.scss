@@ -1,5 +1,9 @@
 .component-scenario{
-  .scenario-text{
+  border-left: 4px solid white;
+  &.active{
+    border-left: 4px solid teal;
+  }
+  .sc-text{
     width: auto;
     display: inline;
   }
