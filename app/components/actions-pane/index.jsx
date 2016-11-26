@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import './style.scss';
+import Suite from '../suite';
 import Scenario from '../scenario';
 
 class ActionsPane extends Component {
@@ -47,12 +48,6 @@ class ActionsPane extends Component {
             value={this.state.url}
           />
           <input
-            placeholder="Describe test"
-            className="form-control"
-            onChange={this.onDescribeChange}
-            value={this.state.describe}
-          />
-          <input
             type="submit"
             className="btn btn-default"
             value="Start!"
@@ -63,9 +58,11 @@ class ActionsPane extends Component {
             className="btn btn-default"
             onClick={this.addScenario}
           >Add scenario</button>
-          {
+          <Suite>
+            {
             this.state.scenarios.map(scenario => scenario)
           }
+          </Suite>
         </div>
       </div>
     );
