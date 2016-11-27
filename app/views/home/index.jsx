@@ -1,3 +1,4 @@
+import cuid from 'cuid';
 import React, { Component } from 'react';
 
 import './style.scss';
@@ -12,13 +13,15 @@ class Home extends Component {
       html: '',
       start: false,
       extract: {},
-      current: {
-        suiteId: null,
-        scenarioId: null,
-      },
+      currentSuiteId: null,
+      suites: [],
     };
     this.onStart = this.onStart.bind(this);
+    this.onUpdate = this.onUpdate.bind(this);
     this.onExtract = this.onExtract.bind(this);
+  }
+  componentDidMount() {
+    this.onStart('http://localhost:3000/');
   }
   onStart(url) {
     Services.fetchPage(url)
@@ -29,8 +32,11 @@ class Home extends Component {
   onExtract(extract) {
     this.setState({ extract });
   }
-  setCurrent(current) {
-    this.setState({ current });
+  onUpdate(suites, currentSuiteId, currentScenarioId) {
+    this.setState({ suites, currentSuiteId, currentScenarioId });
+  }
+  setCurrent(key, value) {
+    this.setState({ [key]: value });
   }
 
   render() {
@@ -43,9 +49,12 @@ class Home extends Component {
         <div className="col-md-4 actionspane-wrapper">
           <ActionsPane
             onStart={this.onStart}
-            extract={this.state.extract}
-            onChange={this.setCurrent}
+            onUpdate={this.onUpdate}
             start={this.state.start}
+            onChange={this.setCurrent}
+            suites={this.state.suites}
+            extract={this.state.extract}
+            getId={cuid}
           />
         </div>
       </div>

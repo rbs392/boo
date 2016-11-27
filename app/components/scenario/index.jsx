@@ -7,42 +7,28 @@ class Scenario extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: props.value.id,
-      shud: props.value.shud || 'Should do scenario',
-      done: props.value.done || ' ',
-      extracts: [],
+      shud: props.shud,
+      done: props.done,
     };
     this.onDone = this.onDone.bind(this);
     this.onShud = this.onShud.bind(this);
+    this.update = this.update.bind(this);
   }
   componentDidMount() {
     this.props.onUpdate(this.state);
   }
-  componentWillReceiveProps(nextProps) {
-    const extracts = this.state.extracts.slice();
-    const lastExtract = extracts[extracts.length - 1];
-    if (!this.checkForDuplicateExtract(lastExtract, nextProps.extract)) {
-      extracts.push(nextProps.extract);
-      this.setState({ extracts });
-    }
-  }
   onShud(value) {
-    this.setState({ shud: value }, () => {
-      this.props.onUpdate(this.state);
-    });
+    this.setState({ shud: value }, this.update);
   }
   onDone(value) {
-    this.setState({ done: value }, () => {
-      this.props.onUpdate(this.state);
-    });
+    this.setState({ done: value }, this.update);
   }
-  // TODO: implement better generic functionality
-  checkForDuplicateExtract(oldVal, newVal) {
-    if (!oldVal) { return false; }
-    return oldVal.selector === newVal.selector;
+  update() {
+    const scenario = Object.assign({}, this.props, this.state);
+    this.props.onUpdate(scenario, this.props.id);
   }
   render() {
-    const { shud, done } = this.props.value;
+    const { shud, done, extracts } = this.props;
     return (
       <div className={`component-scenario ${this.props.className}`}>
         <span className="it">it(&quot;&nbsp;
@@ -50,7 +36,7 @@ class Scenario extends Component {
         &nbsp;&quot;, function(
         <TextInput className="sc-text" onChange={this.onDone} value={done} />
         )&#123;
-        {this.state.extracts.map((extract, i) => <Expect key={i} extract={extract} />)}
+        {extracts.map((extract) => <Expect key={extract.id} extract={extract} />)}
         &#125;);</span>
       </div>
     );
@@ -60,20 +46,12 @@ class Scenario extends Component {
 Scenario.propTypes = {
   onUpdate: PropTypes.func,
   id: PropTypes.string,
-  value: PropTypes.shape({
-    id: PropTypes.string,
-    shud: PropTypes.string,
-    done: PropTypes.string,
-  }),
+  shud: PropTypes.string,
+  done: PropTypes.string,
   className: PropTypes.string,
-  extract: PropTypes.shape({
-    attr: PropTypes.shape({
-      key: PropTypes.string,
-      value: PropTypes.string,
-    }),
-    value: PropTypes.string,
-    selector: PropTypes.string,
-  }),
+  extracts: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  })),
 };
 
 export default Scenario;
