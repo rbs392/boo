@@ -36,6 +36,9 @@
     "nodemon": "^1.11.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "wdio-dot-reporter": "0.0.6",
+    "wdio-mocha-framework": "^0.5.4",
+    "webdriverio": "^4.4.0",
     "webpack": "^2.1.0-beta.27"
   },
   "dependencies": {
