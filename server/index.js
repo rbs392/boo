@@ -42,6 +42,14 @@ app.get('/api/page', (request, response) => {
   });
 });
 
+app.post('/api/result', (request, response) => {
+  let data = '';
+  request.on('data', chunk => (data += chunk));
+  request.on('end', () => {
+    response.status(200).json(JSON.parse(data));
+  });
+});
+
 app.listen(PORT, (err) => {
   if (err) {
     console.log(err);

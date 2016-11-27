@@ -49,7 +49,11 @@ class Home extends Component {
   run(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log(this.state.suites);
+    Services.fetchOutput(this.state.suites)
+    .then((data) => {
+      const newWindow = window.open('about:blank', 'output')
+      newWindow.document.body.innerHTML = JSON.stringify(data);
+    });
   }
   render() {
     const classname = (this.state.html) ? 'row' : 'row inactive';
