@@ -55,7 +55,7 @@ class Suite extends Component {
         &nbsp;&quot;, function(
         <TextInput className="suite-text" onChange={this.onDone} value={done} />
         )&#123;</span>
-        <div className="suites-wrapper">
+        <div className="scenario-wrapper clearfix">
           {
             scenarios.map((obj) => {
               const current = (obj.id === currentScenarioId) ? 'active' : '';
@@ -70,9 +70,9 @@ class Suite extends Component {
               />);
             })
           }
-          <a className="add-suite" tabIndex="-1" onClick={this.addScenario} >
+          <a className="add-scenario pull-right" tabIndex="-1" onClick={this.addScenario} >
+            Add scenario &nbsp;
             <i className="glyphicon glyphicon-plus" />
-            Add scenario
           </a>
         </div>
         <span className="describe">&#125;);</span>

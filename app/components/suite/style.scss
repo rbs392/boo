@@ -3,13 +3,12 @@
     width: auto;
     display: inline;
   }
-  .suites-wrapper{
+  .scenario-wrapper{
     margin-left: 5px;
-    .add-suite{
+    .add-scenario{
       margin-left: 10px;
-      color: #333;
+      font-size: 12px;
       i{
-        font-size: 12px;
         margin-right:10px;
       }
     }

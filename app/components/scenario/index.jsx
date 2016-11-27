@@ -22,8 +22,6 @@ class Scenario extends Component {
   }
   update() {
     const scenario = Object.assign({}, this.props, this.state);
-    console.log(this.props.id);
-    console.log(this.props.id);
     this.props.onUpdate(scenario, this.props.id);
   }
   render() {

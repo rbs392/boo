@@ -49,7 +49,7 @@ class ActionsPane extends Component {
           />
           <input type="submit" className="btn btn-default" value="Start!" />
         </form>
-        <div className="scenarios-wrapper">
+        <div className="suits-wrapper clearfix">
           {
             this.props.start ?
               <div>
@@ -69,8 +69,8 @@ class ActionsPane extends Component {
                     />,
                   )
                 }
-                <a className="add-suite" tabIndex="-1" onClick={this.onAddSuite} >
-                  <i className="glyphicon glyphicon-plus" /> Add suite.
+                <a className="add-suite pull-right" tabIndex="-1" onClick={this.onAddSuite} >
+                   Add suite.&nbsp; <i className="glyphicon glyphicon-plus" />
                 </a>
               </div>
             : null
