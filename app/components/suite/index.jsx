@@ -13,10 +13,10 @@ class Suite extends Component {
     this.addScenario = this.addScenario.bind(this);
   }
   onDesc(value) {
-    this.update({ desc: value });
+    this.update({ desc: value }, this.props.currentScenarioId);
   }
   onDone(value) {
-    this.update({ done: value });
+    this.update({ done: value }, this.props.currentScenarioId);
   }
   onUpdateIt(obj, currentScenarioId) {
     const oldScenarios = this.props.scenarios.slice();
@@ -26,7 +26,7 @@ class Suite extends Component {
       }
       return scenario;
     });
-    this.update({ scenarios, currentScenarioId });
+    this.update({ scenarios }, currentScenarioId);
   }
   addScenario() {
     const id = this.props.getId();
@@ -37,14 +37,11 @@ class Suite extends Component {
       done: ' ',
       extracts: [],
     });
-    this.update({
-      scenarios,
-      currentScenarioId: id,
-    });
+    this.update({ scenarios }, id);
   }
-  update(suite) {
+  update(suite, scenarioId) {
     const newSuite = Object.assign({}, this.props, suite);
-    this.props.onUpdate(newSuite);
+    this.props.onUpdate(newSuite, this.props.id, scenarioId);
   }
   render() {
     const { desc, done, currentScenarioId, scenarios } = this.props;
@@ -87,6 +84,7 @@ Suite.propTypes = {
     id: PropTypes.string,
     extracts: PropTypes.array,
   })),
+  id: PropTypes.string,
   currentScenarioId: PropTypes.string,
   desc: PropTypes.string,
   done: PropTypes.string,

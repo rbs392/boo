@@ -29,10 +29,17 @@ class ActionsPane extends Component {
     });
     this.props.onUpdate(suites, currentSuiteId);
   }
-  onUpdate(val) {
+  onUpdate(val, suiteId, scenariosId) {
     const suites = this.props.suites.slice();
-    const tmp = suites.map(suite => ((suite.id === val.id) ? val : suite));
-    this.props.onUpdate(tmp, val.id, val.currentScenarioId);
+    const tmp = suites.map((suite) => {
+      if (suite.id === val.id) {
+        const { id, done, scenarios, desc } = val;
+        return { id, done, scenarios, desc };
+      }
+      const { id, done, scenarios, desc } = suite;
+      return { id, done, scenarios, desc };
+    });
+    this.props.onUpdate(tmp, suiteId, scenariosId);
   }
   render() {
     return (
@@ -48,6 +55,7 @@ class ActionsPane extends Component {
             value={this.state.url}
           />
           <input type="submit" className="btn btn-default" value="Start!" />
+          <button className="btn btn-default" onClick={this.props.run}>Run.</button>
         </form>
         <div className="suits-wrapper clearfix">
           {
@@ -92,5 +100,6 @@ ActionsPane.propTypes = {
   getId: PropTypes.func,
   onUpdate: PropTypes.func,
   currentSuiteId: PropTypes.string,
+  run: PropTypes.func,
 };
 export default ActionsPane;

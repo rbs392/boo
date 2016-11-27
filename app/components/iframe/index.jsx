@@ -62,7 +62,6 @@ class Iframe extends Component {
     $(staleEl).removeClass('boo-el-active');
   }
   clearEventListeners() {
-    console.log('events cleared');
     const iframeEls = $('#iframe').contents(0).find('body').find('*');
     $(iframeEls).off('click');
     $(iframeEls).off('mouseover');

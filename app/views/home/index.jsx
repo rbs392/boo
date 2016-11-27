@@ -16,6 +16,7 @@ class Home extends Component {
       currentScenarioId: null,
       suites: [],
     };
+    this.run = this.run.bind(this);
     this.onStart = this.onStart.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
     this.onExtract = this.onExtract.bind(this);
@@ -45,10 +46,11 @@ class Home extends Component {
   onUpdate(suites, currentSuiteId, currentScenarioId) {
     this.setState({ suites, currentSuiteId, currentScenarioId });
   }
-  setCurrent(key, value) {
-    this.setState({ [key]: value });
+  run(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(this.state.suites);
   }
-
   render() {
     const classname = (this.state.html) ? 'row' : 'row inactive';
     return (
@@ -58,11 +60,11 @@ class Home extends Component {
         </div>
         <div className="col-md-4 actionspane-wrapper">
           <ActionsPane
+            run={this.run}
             getId={cuid}
             onStart={this.onStart}
             onUpdate={this.onUpdate}
             start={this.state.start}
-            onChange={this.setCurrent}
             suites={this.state.suites}
             extract={this.state.extract}
             currentSuiteId={this.state.currentSuiteId}

@@ -15,13 +15,15 @@ class Scenario extends Component {
     this.update = this.update.bind(this);
   }
   onShud(value) {
-    this.setState({ shud: value }, this.update);
+    this.update({ shud: value });
   }
   onDone(value) {
-    this.setState({ done: value }, this.update);
+    this.update({ done: value });
   }
-  update() {
-    const scenario = Object.assign({}, this.props, this.state);
+  update(scenarioObj) {
+    const { shud, done, extracts, id } = this.props;
+    const result = { shud, done, extracts, id };
+    const scenario = Object.assign({}, result, scenarioObj);
     this.props.onUpdate(scenario, this.props.id);
   }
   render() {
