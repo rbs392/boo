@@ -1,8 +1,12 @@
+import fs from 'fs';
 import Url from 'url';
 import http from 'http';
 import https from 'https';
 import cheerio from 'cheerio';
 import express from 'express';
+import mustache from 'mustache';
+
+const template = fs.readFileSync('./templates/base', 'utf-8');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -46,7 +50,8 @@ app.post('/api/result', (request, response) => {
   let data = '';
   request.on('data', chunk => (data += chunk));
   request.on('end', () => {
-    response.status(200).json(JSON.parse(data));
+    const result = mustache.render(template, { suites: JSON.parse(data) });
+    response.status(200).end(result);
   });
 });
 

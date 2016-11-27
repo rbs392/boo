@@ -51,8 +51,8 @@ class Home extends Component {
     e.stopPropagation();
     Services.fetchOutput(this.state.suites)
     .then((data) => {
-      const newWindow = window.open('about:blank', 'output')
-      newWindow.document.body.innerHTML = JSON.stringify(data);
+      const newWindow = window.open('about:blank', 'output');
+      newWindow.document.body.innerHTML = `<pre>${data}</pre>`;
     });
   }
   render() {

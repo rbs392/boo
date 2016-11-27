@@ -1,0 +1,11 @@
+{{#suites}}
+describe('{{desc}}', function({{done}}){
+  {{#scenarios}}
+  it('{{shud}}', function({{done}}){
+    {{#extracts}}
+    expect('{{selector}}').to.equal('{{value}}');
+    {{/extracts}}
+  })
+  {{/scenarios}}
+})
+{{/suites}}
