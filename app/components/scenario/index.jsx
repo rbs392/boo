@@ -14,9 +14,6 @@ class Scenario extends Component {
     this.onShud = this.onShud.bind(this);
     this.update = this.update.bind(this);
   }
-  componentDidMount() {
-    this.props.onUpdate(this.state);
-  }
   onShud(value) {
     this.setState({ shud: value }, this.update);
   }
@@ -25,6 +22,8 @@ class Scenario extends Component {
   }
   update() {
     const scenario = Object.assign({}, this.props, this.state);
+    console.log(this.props.id);
+    console.log(this.props.id);
     this.props.onUpdate(scenario, this.props.id);
   }
   render() {

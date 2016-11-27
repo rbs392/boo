@@ -7,7 +7,7 @@ class Expect extends Component {
     const { key, value: attrVal } = attr || {};
     const isAttribute = !(key === 'text' || key === 'html');
     const attrStr = isAttribute ? `${key}("${attrVal}")` : `${key}()`;
-    const assert = `$("${selector}").${attrStr}`;
+    const assert = `$('${selector}').${attrStr}`;
     const expect = `expect(${assert}).to.equal("${value}");`;
     return (
       <div className="component-expect">

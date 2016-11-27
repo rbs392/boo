@@ -12,8 +12,8 @@ class Home extends Component {
     this.state = {
       html: '',
       start: false,
-      extract: {},
       currentSuiteId: null,
+      currentScenarioId: null,
       suites: [],
     };
     this.onStart = this.onStart.bind(this);
@@ -30,7 +30,17 @@ class Home extends Component {
     });
   }
   onExtract(extract) {
-    this.setState({ extract });
+    const { currentSuiteId, currentScenarioId, suites } = this.state;
+    const newSuites = suites.map((suite) => {
+      const scenarios = suite.scenarios.map((scenario) => {
+        if (suite.id === currentSuiteId && scenario.id === currentScenarioId) {
+          scenario.extracts.push(Object.assign({}, extract, { id: cuid() }));
+        }
+        return scenario;
+      });
+      return Object.assign({}, suite, { scenarios });
+    });
+    this.setState({ suites: newSuites });
   }
   onUpdate(suites, currentSuiteId, currentScenarioId) {
     this.setState({ suites, currentSuiteId, currentScenarioId });
@@ -48,13 +58,15 @@ class Home extends Component {
         </div>
         <div className="col-md-4 actionspane-wrapper">
           <ActionsPane
+            getId={cuid}
             onStart={this.onStart}
             onUpdate={this.onUpdate}
             start={this.state.start}
             onChange={this.setCurrent}
             suites={this.state.suites}
             extract={this.state.extract}
-            getId={cuid}
+            currentSuiteId={this.state.currentSuiteId}
+            currentScenarioId={this.state.currentScenarioId}
           />
         </div>
       </div>

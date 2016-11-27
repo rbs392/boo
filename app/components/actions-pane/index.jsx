@@ -29,10 +29,10 @@ class ActionsPane extends Component {
     });
     this.props.onUpdate(suites, currentSuiteId);
   }
-  onUpdate(val, currentScenarioId) {
+  onUpdate(val) {
     const suites = this.props.suites.slice();
     const tmp = suites.map(suite => ((suite.id === val.id) ? val : suite));
-    this.props.onUpdate(tmp, val.id, currentScenarioId);
+    this.props.onUpdate(tmp, val.id, val.currentScenarioId);
   }
   render() {
     return (
@@ -60,11 +60,12 @@ class ActionsPane extends Component {
                       key={suite.id}
                       desc={suite.desc}
                       done={suite.done}
+                      getId={this.props.getId}
                       onUpdate={this.onUpdate}
                       scenarios={suite.scenarios}
                       onAddScenario={this.addScenario}
+                      currentSuiteId={this.props.currentSuiteId}
                       currentScenarioId={this.props.currentScenarioId}
-                      getId={this.props.getId}
                     />,
                   )
                 }
@@ -90,5 +91,6 @@ ActionsPane.propTypes = {
   currentScenarioId: PropTypes.string,
   getId: PropTypes.func,
   onUpdate: PropTypes.func,
+  currentSuiteId: PropTypes.string,
 };
 export default ActionsPane;
