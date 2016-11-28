@@ -1,14 +1,15 @@
-{{#suites}}
-describe('{{desc}}', function({{done}}){
-  {{#scenarios}}
-  it('{{shud}}', function({{done}}){
-    {{#extracts}}
-      {{^eval}}
-      expect('{{selector}}').to.equal('{{value}}');
-      {{/eval}}
-      {{eval}}
-    {{/extracts}}
-  })
-  {{/scenarios}}
+/* Test Generated via Boo. :-o*/
+
+const expect = require('chai').expect;
+{{#each suites}}
+describe('{{desc}}', function({{done}}) {
+  {{#each scenarios}}
+    it('{{shud}}', function({{done}}) {
+        browser.url('{{../../url}}');
+      {{#each extracts}}
+        {{#extract}}{{/extract}}
+      {{/each}}
+    });
+  {{/each}}
 })
-{{/suites}}
+{{/each}}

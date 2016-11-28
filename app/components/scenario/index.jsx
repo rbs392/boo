@@ -34,7 +34,7 @@ class Scenario extends Component {
     this.update({ extracts });
   }
   onDeleteExtract(id) {
-    const extracts = this.props.extracts.filter(extract => (extract.id === id));
+    const extracts = this.props.extracts.filter(extract => (extract.id !== id));
     this.update({ extracts });
   }
   update(scenarioObj) {

@@ -4,10 +4,40 @@ import http from 'http';
 import https from 'https';
 import cheerio from 'cheerio';
 import express from 'express';
-import mustache from 'mustache';
+import handlebars from 'handlebars';
 
-const template = fs.readFileSync('./templates/base', 'utf-8');
+function genExpect(actual, expected) {
+  return `expect(${actual}).to.be.equal('${expected}');</br>`;
+}
 
+function formatEval(code) {
+  const multiline = code.replace(/<\/div>(<br>)*<div>/g, '\n\t');
+  const result = multiline.replace(/<div>/g, '\t').replace(/<\/div>/g, '\n\t');
+  return result.replace(/<\/*br>/g, '').trim();
+}
+
+function extract() {
+  if (this.eval) {
+    return `${formatEval(this.eval)}</br>`;
+  }
+  switch (this.attr.key) {
+    case 'text': {
+      return genExpect(`$('${this.selector}').getText()`, this.value);
+    }
+    case 'html': {
+      return genExpect(`$('${this.selector}').getHTML(false)`, this.value);
+    }
+    default: {
+      const attrText = `selectByAttribute('${this.attr.value}', '')`;
+      return genExpect(`$('${this.selector}').${attrText}`, this.value);
+    }
+  }
+}
+
+handlebars.registerHelper('extract', extract);
+
+const templateraw = fs.readFileSync('./templates/base', 'utf-8');
+const template = handlebars.compile(templateraw);
 const app = express();
 const PORT = process.env.PORT || 8000;
 
@@ -50,7 +80,7 @@ app.post('/api/result', (request, response) => {
   let data = '';
   request.on('data', chunk => (data += chunk));
   request.on('end', () => {
-    const result = mustache.render(template, { suites: JSON.parse(data) });
+    const result = template(JSON.parse(data));
     response.status(200).end(result);
   });
 });

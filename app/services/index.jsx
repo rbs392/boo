@@ -4,13 +4,13 @@ class Services {
     .then(data => data.json());
   }
 
-  fetchOutput(data) {
+  fetchOutput(suites, url) {
     return fetch('/api/result', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ suites, url }),
     }).then(res => res.text());
   }
 }

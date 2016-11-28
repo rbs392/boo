@@ -28,7 +28,7 @@ class Home extends Component {
   onStart(url) {
     Services.fetchPage(url)
     .then((data) => {
-      this.setState({ html: data.data, start: true });
+      this.setState({ html: data.data, start: true, url });
     });
   }
   onExtract(extract) {
@@ -50,7 +50,7 @@ class Home extends Component {
   run(e) {
     e.preventDefault();
     e.stopPropagation();
-    Services.fetchOutput(this.state.suites)
+    Services.fetchOutput(this.state.suites, this.state.url)
     .then((data) => {
       if (!this.resultWindow || this.resultWindow.closed) {
         this.resultWindow = window.open('about:blank', 'output');

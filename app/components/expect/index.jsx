@@ -6,6 +6,9 @@ class Expect extends Component {
   constructor(props) {
     super(props);
     this.onEval = this.onEval.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.formatEval = this.formatEval.bind(this);
+    this.formatExtract = this.formatExtract.bind(this);
   }
   onEval(code) {
     this.props.onUpdate({ eval: code, attr: {} }, this.props.id);
