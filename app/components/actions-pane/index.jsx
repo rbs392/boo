@@ -10,6 +10,7 @@ class ActionsPane extends Component {
     this.onUrlChange = this.onUrlChange.bind(this);
     this.onAddSuite = this.onAddSuite.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
+    this.onDeleteSuite = this.onDeleteSuite.bind(this);
   }
   onUrlChange(e) {
     this.setState({ url: e.target.value });
@@ -40,6 +41,10 @@ class ActionsPane extends Component {
       return { id, done, scenarios, desc };
     });
     this.props.onUpdate(tmp, suiteId, scenariosId);
+  }
+  onDeleteSuite(id) {
+    const suites = this.props.suites.filter(suite => (suite.id !== id));
+    this.props.onUpdate(suites, null, null);
   }
   render() {
     return (
@@ -74,10 +79,11 @@ class ActionsPane extends Component {
                       onAddScenario={this.addScenario}
                       currentSuiteId={this.props.currentSuiteId}
                       currentScenarioId={this.props.currentScenarioId}
+                      onDelete={this.onDeleteSuite}
                     />,
                   )
                 }
-                <a className="add-suite pull-right" tabIndex="-1" onClick={this.onAddSuite} >
+                <a className="add pull-right" tabIndex="-1" onClick={this.onAddSuite} >
                    Add suite.&nbsp; <i className="glyphicon glyphicon-plus" />
                 </a>
               </div>

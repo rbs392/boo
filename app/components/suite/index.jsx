@@ -11,6 +11,8 @@ class Suite extends Component {
     this.update = this.update.bind(this);
     this.onUpdateIt = this.onUpdateIt.bind(this);
     this.addScenario = this.addScenario.bind(this);
+    this.onDeleteSuite = this.onDeleteSuite.bind(this);
+    this.onDeleteScenario = this.onDeleteScenario.bind(this);
   }
   onDesc(value) {
     this.update({ desc: value }, this.props.currentScenarioId);
@@ -28,6 +30,19 @@ class Suite extends Component {
     });
     this.update({ scenarios }, currentScenarioId);
   }
+  onDeleteScenario(id) {
+    const scenarios = this.props.scenarios.filter(scenario => (scenario.id !== id));
+    this.update({ scenarios }, null);
+  }
+  onDeleteSuite(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.onDelete(this.props.id);
+  }
+  update(suite, scenarioId) {
+    const newSuite = Object.assign({}, this.props, suite);
+    this.props.onUpdate(newSuite, this.props.id, scenarioId);
+  }
   addScenario() {
     const id = this.props.getId();
     const scenarios = this.props.scenarios.slice();
@@ -39,20 +54,17 @@ class Suite extends Component {
     });
     this.update({ scenarios }, id);
   }
-  update(suite, scenarioId) {
-    const newSuite = Object.assign({}, this.props, suite);
-    this.props.onUpdate(newSuite, this.props.id, scenarioId);
-  }
   render() {
     const { desc, done, currentScenarioId, scenarios } = this.props;
     return (
       <div className="component-suite panel panel-default panel-body">
+        <a href="" className="close" onClick={this.onDeleteSuite}>&times;</a>
         <span className="describe">describe(&quot;&nbsp;
         <TextInput className="suite-text" onChange={this.onDesc} value={desc} />
         &nbsp;&quot;, function(
         <TextInput className="suite-text" onChange={this.onDone} value={done} />
         )&#123;</span>
-        <div className="scenario-wrapper clearfix">
+        <div className="scenario-wrapper">
           {
             scenarios.map((obj) => {
               const current = (obj.id === currentScenarioId) ? 'active' : '';
@@ -64,10 +76,11 @@ class Suite extends Component {
                 done={obj.done}
                 onUpdate={this.onUpdateIt}
                 extracts={obj.extracts}
+                onDelete={this.onDeleteScenario}
               />);
             })
           }
-          <a className="add-scenario pull-right" tabIndex="-1" onClick={this.addScenario} >
+          <a className="add pull-right" tabIndex="-1" onClick={this.addScenario} >
             Add scenario &nbsp;
             <i className="glyphicon glyphicon-plus" />
           </a>
@@ -89,6 +102,7 @@ Suite.propTypes = {
   desc: PropTypes.string,
   done: PropTypes.string,
   getId: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 export default Suite;

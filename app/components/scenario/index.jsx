@@ -6,19 +6,36 @@ import Expect from '../expect';
 class Scenario extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      shud: props.shud,
-      done: props.done,
-    };
     this.onDone = this.onDone.bind(this);
     this.onShud = this.onShud.bind(this);
     this.update = this.update.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.onDeleteExtract = this.onDeleteExtract.bind(this);
+    this.onUpdateExtract = this.onUpdateExtract.bind(this);
   }
   onShud(value) {
     this.update({ shud: value });
   }
   onDone(value) {
     this.update({ done: value });
+  }
+  onDelete(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.onDelete(this.props.id);
+  }
+  onUpdateExtract(newExtact, id) {
+    const extracts = this.props.extracts.map((extract) => {
+      if (extract.id === id) {
+        return Object.assign({}, extract, newExtact);
+      }
+      return extract;
+    });
+    this.update({ extracts });
+  }
+  onDeleteExtract(id) {
+    const extracts = this.props.extracts.filter(extract => (extract.id === id));
+    this.update({ extracts });
   }
   update(scenarioObj) {
     const { shud, done, extracts, id } = this.props;
@@ -29,13 +46,21 @@ class Scenario extends Component {
   render() {
     const { shud, done, extracts } = this.props;
     return (
-      <div className={`component-scenario ${this.props.className}`}>
+      <div className={`component-scenario clearfix ${this.props.className}`}>
+        <a href="" className="close" onClick={this.onDelete}>&times;</a>
         <span className="it">it(&quot;&nbsp;
         <TextInput className="sc-text" onChange={this.onShud} value={shud} />
         &nbsp;&quot;, function(
         <TextInput className="sc-text" onChange={this.onDone} value={done} />
         )&#123;
-        {extracts.map((extract) => <Expect key={extract.id} extract={extract} />)}
+        {extracts.map(extract =>
+          <Expect
+            id={extract.id}
+            key={extract.id}
+            extract={extract}
+            onUpdate={this.onUpdateExtract}
+            onDelete={this.onDeleteExtract}
+          />)}
         &#125;);</span>
       </div>
     );
@@ -51,6 +76,7 @@ Scenario.propTypes = {
   extracts: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
   })),
+  onDelete: PropTypes.func,
 };
 
 export default Scenario;

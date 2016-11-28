@@ -16,6 +16,7 @@ class Home extends Component {
       currentScenarioId: null,
       suites: [],
     };
+    this.resultWindow = null;
     this.run = this.run.bind(this);
     this.onStart = this.onStart.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
@@ -51,8 +52,11 @@ class Home extends Component {
     e.stopPropagation();
     Services.fetchOutput(this.state.suites)
     .then((data) => {
-      const newWindow = window.open('about:blank', 'output');
-      newWindow.document.body.innerHTML = `<pre>${data}</pre>`;
+      if (!this.resultWindow || this.resultWindow.closed) {
+        this.resultWindow = window.open('about:blank', 'output');
+      }
+      this.resultWindow.document.body.innerHTML = `<pre>${data}</pre>`;
+      this.resultWindow.focus();
     });
   }
   render() {

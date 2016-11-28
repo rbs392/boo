@@ -1,4 +1,14 @@
 .component-actionspane{
+  .close{
+    margin-left: 5px;
+  }
+  .add{
+    margin-left: 10px;
+    font-size: 12px;
+    i{
+      margin-right:10px;
+    }
+  }
   .form-group{
     margin: 10px 0px;
     .form-control{

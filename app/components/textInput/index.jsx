@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import './style.scss';
 
 class TextInput extends Component {
   constructor(props) {
@@ -10,9 +11,9 @@ class TextInput extends Component {
   }
   render() {
     return (
-      <div
+      <pre
         contentEditable
-        className={this.props.className}
+        className={`component-textInput ${this.props.className}`}
         ref={(n) => { this.node = n; }}
         onInput={this.onChange}
         dangerouslySetInnerHTML={{ __html: this.props.value }}

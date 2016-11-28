@@ -36,6 +36,7 @@ class Iframe extends Component {
     const attributes = [
       { key: 'text', value: 'text' },
       { key: 'html', value: 'html' },
+      { key: 'eval', value: 'Custom eval' },
     ];
     const style = Object.assign({}, this.state.style, {
       top: `${e.clientY + offset}px`,
@@ -80,7 +81,10 @@ class Iframe extends Component {
       let value = '';
       const attr = { key: el.key };
       const selector = select(this.state.selectedEl);
-      if (el.value === 'text' || el.value === 'html') {
+      let customEval = null;
+      if (el.value === 'Custom eval') {
+        customEval = '/* Enter your custom script here */';
+      } else if (el.value === 'text' || el.value === 'html') {
         value = $(this.state.selectedEl)[el.key]();
       } else {
         value = $(this.state.selectedEl)[el.key](el.value);
@@ -91,6 +95,7 @@ class Iframe extends Component {
           attr,
           value,
           selector,
+          eval: customEval,
         });
       });
     };
