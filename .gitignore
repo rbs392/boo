@@ -3,3 +3,4 @@ errorShots
 dist
 node_modules
 npm-debug.log
+wdio.config.js
