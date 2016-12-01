@@ -1,0 +1,28 @@
+{
+  "name": "boo-integration-test-seed",
+  "version": "1.0.0",
+  "description": "Integration test framework for boo",
+  "main": "index.js",
+  "scripts": {
+    "test": "wdio",
+    "start": "selenium-standalone start",
+    "postinstall": "selenium-standalone install && wdio"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbs392/boo.git"
+  },
+  "author": "rbs392",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbs392/boo/issues"
+  },
+  "homepage": "https://github.com/rbs392/boo#readme",
+  "dependencies": {
+    "selenium-standalone": "^5.8.0",
+    "webdriverio": "^4.4.0"
+  },
+  "devDependencies": {
+    "wdio-mocha-framework": "^0.5.4"
+  }
+}
