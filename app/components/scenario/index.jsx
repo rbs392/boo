@@ -61,6 +61,7 @@ class Scenario extends Component {
             onUpdate={this.onUpdateExtract}
             onDelete={this.onDeleteExtract}
           />)}
+          <div className="done">{((done.trim()) ? `${done.trim()}();` : null)}</div>
         &#125;);</span>
       </div>
     );

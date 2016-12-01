@@ -21,6 +21,14 @@ function extract() {
     return `${formatEval(this.eval)}</br>`;
   }
   switch (this.attr.key) {
+    case 'click': {
+      return `$('${this.selector}').click();`;
+    }
+    case 'wait': {
+      return `browser.waitUntil(new Promise((resolve)=>{
+          ${formatEval(this.value)}
+        }))`;
+    }
     case 'text': {
       return genExpect(`$('${this.selector}').getText()`, this.value);
     }

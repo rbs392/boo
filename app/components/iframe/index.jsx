@@ -37,6 +37,9 @@ class Iframe extends Component {
       { key: 'text', value: 'text' },
       { key: 'html', value: 'html' },
       { key: 'eval', value: 'Custom eval' },
+      { key: 'click', value: 'click' },
+      { key: 'wait', value: 'Add wait' },
+
     ];
     const style = Object.assign({}, this.state.style, {
       top: `${e.clientY + offset}px`,
@@ -82,13 +85,23 @@ class Iframe extends Component {
       const attr = { key: el.key };
       const selector = select(this.state.selectedEl);
       let customEval = null;
-      if (el.value === 'Custom eval') {
-        customEval = '/* Enter your custom script here */';
-      } else if (el.value === 'text' || el.value === 'html') {
-        value = $(this.state.selectedEl)[el.key]();
-      } else {
-        value = $(this.state.selectedEl)[el.key](el.value);
-        attr.value = el.value;
+      switch (el.key) {
+        case 'eval':
+          customEval = '/* Enter your custom script here */';
+          break;
+        case 'click':
+          value = '';
+          $(this.state.selectedEl).click();
+          break;
+        case 'wait': value = '/* Enter your custom script here */';
+          break;
+        case 'text':
+        case 'html':
+          value = $(this.state.selectedEl)[el.key]();
+          break;
+        default:
+          value = $(this.state.selectedEl)[el.key](el.value);
+          attr.value = el.value;
       }
       this.setState({ showPopup: false, selectedEl: null }, () => {
         this.props.onExtract({

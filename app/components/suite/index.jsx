@@ -85,7 +85,8 @@ class Suite extends Component {
             <i className="glyphicon glyphicon-plus" />
           </a>
         </div>
-        <span className="describe">&#125;);</span>
+        <div className="done">{((done.trim()) ? `${done.trim()}();` : null)}</div>
+        <div className="describe">&#125;);</div>
       </div>
     );
   }
